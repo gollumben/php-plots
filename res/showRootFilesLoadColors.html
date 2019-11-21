@@ -5,7 +5,7 @@
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-   <title>Reading object from the ROOT file</title>
+   <title>Interactive plotting by reading object from a ROOT file with JSROOT.</title>
 Information: Loading of the files can take some seconds.
    <script src="https://root.cern/js/latest/scripts/JSRootCore.min.js?io&2d&onload=DrawMg" type="text/javascript"></script>
 
@@ -33,15 +33,18 @@ Information: Loading of the files can take some seconds.
 			file.ReadObject("ListOfColors", function(obj) {
 				JSROOT.Painter.adoptRootColors(obj);
 				JSROOT.progress("Reading canvas");
-				file.ReadObject("canvas2D", function(obj_g) {
-					JSROOT.progress("done", 1000);
-					JSROOT.draw("drawing", obj_g, "AL");
-				});
-				file.ReadObject("canvas", function(obj_g) {
-					JSROOT.progress("done", 1000);
-					JSROOT.draw("drawing", obj_g, "AL");
-				});
+				for (var n=0; n<file.fKeys.length; ++n) {
+					if 		(file.fKeys[n].fName == "canvas2D") 	drawCanvas(file, "canvas2D"); 
+					else if 	(file.fKeys[n].fName == "canvas") 	drawCanvas(file, "canvas"); 
+				}
 			});
+		});
+	}
+
+	function drawCanvas(file, canvasName){
+		file.ReadObject(canvasName, function(obj_g) {
+			JSROOT.progress("done", 1000);
+			JSROOT.draw("drawing", obj_g, "AL");
 		});
 	}
    </script>
