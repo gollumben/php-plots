@@ -279,7 +279,13 @@ foreach ($allfiles as $filename) {
         if (is_dir($filename)) {
 		// print "<li>[DIR] <a href=\"$filename\">$filename</a></li>";
         } else {
-            print "<li><a href=\"$filename\">$filename</a></li>";
+	    $file_info = pathinfo($filename);
+	    if ($file_info["extension"] == "root"){
+		    $local_dir = str_replace($script_path, "", $folder);
+	            print "<li><a href=\"https://".$_SERVER['SERVER_NAME']."$script_path/res/showRootFilesLoadColors.html?ifile=..$local_dir$filename\" target=\"_blank\">$filename</a></li>";
+	    } else {
+	            print "<li><a href=\"$filename\">$filename</a></li>";
+	    }
         }
     }
 }
